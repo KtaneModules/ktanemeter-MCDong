@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 using Newtonsoft.Json;
 using Random = System.Random;
@@ -64,7 +65,7 @@ public class Meter : MonoBehaviour {
         }
         else
         {
-            Debug.LogFormat("[Meter #{0}] Pressed {1} button", moduleId, buttonIndex);
+            Debug.LogFormat("[Meter #{0}] Pressed {1} button", moduleId, buttonIndex == 0 ? "u" : "-");
             int kp = Array.IndexOf(buttonPressSequence, -1);
             buttonPressSequence[kp] = buttonIndex;
             int km = Array.IndexOf(keyMeter, -1);
@@ -132,31 +133,34 @@ public class Meter : MonoBehaviour {
 
     int GetNatoValue(string str)
     {
-        string trochee = "ABCDEFKLOPTWY";
-        string iamb = "HQ";
-        string single = "GM";
-        string dactyl = "IRU";
-        string anapest = "J";
-        string amphibrach = "NS";
-        string spondee = "VXZ";
+        Dictionary<string, int> natoValues = new Dictionary<string, int>()
+        {
+            //single 
+            {"GM", 1},
+            //spondee 
+            {"VXZ", 2},
+            //amphibrach 
+            {"NS", 4},
+            //dactyl 
+            {"IRU", 7},
+            //iamb 
+            {"HQ", 8},
+            //anapest 
+            {"J", 9},
+            //trochee 
+            {"ABCDEFKLOPTWY", 11},
 
+        };
 
-        if (single.Contains(str))
-            return 1;
-        else if (spondee.Contains(str))
-            return 2;
-        else if (amphibrach.Contains(str))
-            return 4;
-        else if (dactyl.Contains(str))
-            return 7;
-        else if (iamb.Contains(str))
-            return 8;
-        else if (anapest.Contains(str))
-            return 10;
-        else if (trochee.Contains(str))
-            return 11;
-        else
-            return 1;
+        foreach (KeyValuePair<string, int> nato in natoValues)
+        {
+            if (nato.Key.Contains(str))
+            {
+                return nato.Value;
+            }
+        }
+
+        return 1;
     }
 
     void UpdateDisplays()
@@ -221,23 +225,23 @@ public class Meter : MonoBehaviour {
         };
         for (int i = 0; i < Lines.Length; i++)
         {
-            Debug.LogFormat("[Meter #{0}] Line {1}", moduleId, i+1);
+            Debug.LogFormat("[Meter #{0}] **Line {1}**", moduleId, i+1);
             string phrase = Lines[i].text;
             int value = selectedPhrases[phrase];
             Debug.LogFormat("[Meter #{0}] Foot value before modifier: {1}", moduleId, value);
             int modifiedValue = (value + footMod) % 12;
-            Debug.LogFormat("[Meter #{0}] Modified foot value: {1}", moduleId, modifiedValue);
+            Debug.LogFormat("[Meter #{0}] Modified foot value: ({1} + {2}) = {3}; {3} mod 12 = {4}", moduleId, value, footMod, value+footMod, modifiedValue);
             List<int> pattern = syllablePattern[modifiedValue];
-            var patStr = from x in pattern select x.ToString();
-            Debug.LogFormat("[Meter #{0}] Pattern: [{1}]", moduleId, String.Join(",", patStr.ToArray()));
+            var logPat = pattern.Select(x => x == -1 ? "" : x == 0 ? "u" : "-").ToArray();
+            Debug.LogFormat("[Meter #{0}] Pattern for foot value {1}: [{2}]", moduleId, modifiedValue, String.Join(" ", logPat));
             int idx = Array.IndexOf(keyMeter, -1);
             for (int j = 0; j < pattern.Count; j++)
             {
                 keyMeter[idx + j] = pattern[j];
             }
         }
-        var keyStr = from x in keyMeter select x.ToString();
-        Debug.LogFormat("[Meter #{0}] KeyMeter: [{1}]", moduleId, String.Join(",", keyStr.ToArray()));
+        var keyPat = keyMeter.Select(x => x == -1 ? "" : x == 0 ? "u" : "-").ToArray();
+        Debug.LogFormat("[Meter #{0}] Key Meter: [{1}]", moduleId, String.Join(" ", keyPat));
     }
 
     // Update is called once per frame
