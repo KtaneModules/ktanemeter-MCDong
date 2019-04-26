@@ -105,22 +105,23 @@ public class Meter : MonoBehaviour {
         int footMod = 0;
         int numLetters = 0;
         int numDigits = 0;
-        for (int i = 0; i < serial.Length && (numLetters < 2 || numDigits < 1); i++)
+        for (int i = 0, j = serial.Length - 1; i < serial.Length; i++, j--)
         {
-            string cur = serial.Substring(i, 1);
-            if (alphabet.Contains(cur))
+            string cur_i = serial.Substring(i, 1);
+            if (alphabet.Contains(cur_i) && numLetters < 2)
             {
                 numLetters++;
-                int nato = GetNatoValue(cur.ToUpper());
-                Debug.LogFormat("[Meter #{0}] Nato value of {1} is {2}. Added to foot modifier", moduleId, cur.ToUpper(), nato);
+                int nato = GetNatoValue(cur_i.ToUpper());
+                Debug.LogFormat("[Meter #{0}] Nato value of {1} is {2}. Added to foot modifier", moduleId, cur_i.ToUpper(), nato);
                 footMod += nato;
             }
 
-            if (digits.Contains(cur) && numDigits == 0)
+            string cur_j = serial.Substring(j, 1);
+            if (digits.Contains(cur_j) && numDigits == 0)
             {
                 numDigits++;
-                Debug.LogFormat("[Meter #{0}] Serial number digit {1} added to foot modifier", moduleId, cur);
-                footMod += Int32.Parse(cur);
+                Debug.LogFormat("[Meter #{0}] Serial number digit {1} added to foot modifier", moduleId, cur_j);
+                footMod += Int32.Parse(cur_j);
             }
 
         }
