@@ -30,9 +30,10 @@ public class Meter : MonoBehaviour {
         phraseValues.Add("antibacchius", 6);
         phraseValues.Add("dactyl", 7);
         phraseValues.Add("iamb", 8);
-        phraseValues.Add("cretic", 9);
-        phraseValues.Add("trochee", 10);
-        phraseValues.Add("tribrach", 11);
+        phraseValues.Add("anapest", 9);
+        phraseValues.Add("cretic", 10);
+        phraseValues.Add("trochee", 11);
+        phraseValues.Add("tribrach", 12);
         Init();
 
         GetComponent<KMBombModule>().OnActivate += ActivateModule;
@@ -131,13 +132,13 @@ public class Meter : MonoBehaviour {
 
     int GetNatoValue(string str)
     {
-        string trochee = "ABCDEFKLOPTVWYZ";
+        string trochee = "ABCDEFKLOPTWY";
         string iamb = "HQ";
         string single = "GM";
         string dactyl = "IRU";
-        string cretic = "J";
+        string anapest = "J";
         string amphibrach = "NS";
-        string spondee = "X";
+        string spondee = "VXZ";
 
 
         if (single.Contains(str))
@@ -150,7 +151,7 @@ public class Meter : MonoBehaviour {
             return 7;
         else if (iamb.Contains(str))
             return 8;
-        else if (cretic.Contains(str))
+        else if (anapest.Contains(str))
             return 10;
         else if (trochee.Contains(str))
             return 11;
