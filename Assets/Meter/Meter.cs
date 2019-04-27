@@ -159,7 +159,7 @@ public class Meter : MonoBehaviour {
                 return nato.Value;
             }
         }
-
+        Debug.LogError(string.Format("'{0}' was not recognized as an alphabet letter", str));
         return 1;
     }
 
@@ -225,8 +225,8 @@ public class Meter : MonoBehaviour {
         };
         for (int i = 0; i < Lines.Length; i++)
         {
-            Debug.LogFormat("[Meter #{0}] **Line {1}**", moduleId, i+1);
             string phrase = Lines[i].text;
+            Debug.LogFormat("[Meter #{0}] **Line {1} - \"{2}\"**", moduleId, i + 1, phrase);
             int value = selectedPhrases[phrase];
             Debug.LogFormat("[Meter #{0}] Foot value before modifier: {1}", moduleId, value);
             int modifiedValue = (value + footMod) % 12;
