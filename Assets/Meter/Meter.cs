@@ -23,18 +23,50 @@ public class Meter : MonoBehaviour {
     void Start ()
     {
         moduleId = moduleIdCounter++;
-        phraseValues.Add("molossus", 1);
-        phraseValues.Add("spondee", 2);
-        phraseValues.Add("bacchius", 3);
-        phraseValues.Add("amphibrach", 4);
-        phraseValues.Add("dibrach", 5);
-        phraseValues.Add("antibacchius", 6);
-        phraseValues.Add("dactyl", 7);
-        phraseValues.Add("iamb", 8);
-        phraseValues.Add("anapest", 9);
-        phraseValues.Add("cretic", 10);
-        phraseValues.Add("trochee", 11);
-        phraseValues.Add("tribrach", 12);
+        //molossus
+        phraseValues.Add("Break, Break, Break", 1);
+        //spondee
+        phraseValues.Add("Cry! Cry!", 2);
+        phraseValues.Add("Shut up!", 2);
+        phraseValues.Add("Fie, fie!", 2);
+        //bacchius
+        phraseValues.Add("When day breaks /\nthe fish bite /\nat small flies", 3);
+        //amphibrach
+        phraseValues.Add("it's four in the morning,\n\tthe end of december /\nI'm writing you now \n\tjust to see if you're better", 4);
+        phraseValues.Add("And, speaking of birds,\n\tthere’s the Russian Palooski /\nwhose headski is redski\n\tand belly is blueski", 4);
+        phraseValues.Add("There once was a girl from Nantucket", 4);
+        phraseValues.Add("How dead to my heart are\n\tthe scenes of my childhood", 4);
+        //dibrach
+        //antibacchius
+        phraseValues.Add("Blind luck is loved more\n\tthan hard thinking", 6);
+        //dactyl
+        phraseValues.Add("Out of the mockingbird's throat", 7);
+        phraseValues.Add("Higgledy piggledy, /\nBacon, lord Chancellor.", 7);
+        phraseValues.Add("This is the forest primeval.\n\tThe murmuring pines and the hemlocks", 7);
+        phraseValues.Add("Half a league, half a league, /\nHalf a league onward,", 7);
+        phraseValues.Add("Down to the shores of the water,\n\tthe path by the swamp in the dimness", 7);
+        //iamb
+        phraseValues.Add("If you were coming in the fall /\nI'd brush the summer by", 8);
+        phraseValues.Add("The guests are met,\n\tthe feast is set: /\nMay'st hear the merry din.", 8);
+        phraseValues.Add("The way a crow /\nShook down on me /\nThe dust of snow", 8);
+        phraseValues.Add("Rough winds do shake the\n\tdarling buds of May,\n\tAnd summer's lease hath\n\tall too short a date", 8);
+        phraseValues.Add("Is this chicken, what I have,\n\tor is this fish?", 8);
+        phraseValues.Add("To swell the gourd and\n\tplump the hazel shells", 8);
+        //anapest
+        phraseValues.Add("Twas the night before Christmas\n\tand all through the house", 9);
+        phraseValues.Add("There was one who was famed\n\tfor the number of things /\nHe forgot when he\n\tentered the sip:", 9);
+        phraseValues.Add("You have brains in your head. /\nYou have feet in your shoes", 9);
+        phraseValues.Add("And since birth I've been cursed\n\twith this curse to just curse", 9);
+        //cretic
+        phraseValues.Add("La-di-dah!", 10);
+        //trochee
+        phraseValues.Add("Tyger! Tyger! Burning Bright", 11);
+        phraseValues.Add("Once upon a midnight dreary,\n\twhile I pondered,\n\tweak and weary,", 11);
+        phraseValues.Add("And the Raven, never flitting,\n\tstill is sitting,\n\tstill is sitting", 11);
+        phraseValues.Add("Double, double toil and trouble; /\nFire burn and cauldron bubble.", 11);
+        phraseValues.Add("One Fish Two Fish Red Fish Blue Fish", 11);
+        phraseValues.Add("Got a long list of ex-lovers", 11);
+        //tribrach
         Init();
 
         GetComponent<KMBombModule>().OnActivate += ActivateModule;
