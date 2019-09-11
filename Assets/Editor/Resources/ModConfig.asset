@@ -15,7 +15,11 @@ MonoBehaviour:
   title: Meter
   author: 
   description: "[h1]On the subject of Meter[/h1]\n\n\"A poet can survive anything
-    but a misprint\" -Oscar Wilde\r\n\n-\nWritten by Scriv, coded by Koscie (https://steamcommunity.com/id/usedpresident)\n\n\n"
+    but a misprint\" -Oscar Wilde\r\n\nThink you're a prosody pro, and a master of
+    metrical\nfeet? Are you able to figure out Homer and Keats? Do you\nknow how a
+    dactyl compares to an anapest? Know how to\nhandle some macrons and breves? Can
+    you measure the rhythm and\nbeats? Or will syllables make you explode in defeat?\n\n-\nWritten
+    by Alice (Discord Pockets\r#6361)\r\nCoded by Koscie (https://steamcommunity.com/id/usedpresident)\n\n\n"
   version: 
   outputFolder: build
-  previewImage: {fileID: 0}
+  previewImage: {fileID: 2800000, guid: 8b523a6f3d2df374fba2507920e27885, type: 3}
