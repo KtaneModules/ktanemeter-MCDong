@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using Newtonsoft.Json;
 using Random = System.Random;
@@ -17,7 +18,7 @@ public class Meter : MonoBehaviour {
     Dictionary<string, int> phraseValues = new Dictionary<string, int>();
     Dictionary<string, int> selectedPhrases = new Dictionary<string, int>();
     private int moduleId = 0;
-    static int moduleIdCounter = 0;
+    static int moduleIdCounter = 1;
     private int[] keyMeter;
     // Use this for initialization
     void Start ()
@@ -97,7 +98,6 @@ public class Meter : MonoBehaviour {
         }
         else
         {
-            Debug.LogFormat("[Meter #{0}] Pressed {1} button", moduleId, buttonIndex == 0 ? "u" : "-");
             int kp = Array.IndexOf(buttonPressSequence, -1);
             buttonPressSequence[kp] = buttonIndex;
             int km = Array.IndexOf(keyMeter, -1);
@@ -105,13 +105,21 @@ public class Meter : MonoBehaviour {
             {
                 if (buttonPressSequence[i] != keyMeter[i])
                 {
+                    Debug.LogFormat("[Meter #{0}] Pressed {1} button, that was incorrect. Strike received and inputs reset.", moduleId, buttonIndex == 0 ? "u" : "-");
                     buttonPressSequence = new int[] {-1,-1,-1,-1,-1,-1};
                     GetComponent<KMBombModule>().HandleStrike();
                     return;
                 }
             }
-            if (kp+1 == km || kp+1 == keyMeter.Length)
+            if (kp + 1 == km || kp + 1 == keyMeter.Length)
+            {
+                Debug.LogFormat("[Meter #{0}] Pressed {1} button, that was correct. Module Solved!", moduleId, buttonIndex == 0 ? "u" : "-");
                 GetComponent<KMBombModule>().HandlePass();
+            }
+            else
+            {
+                Debug.LogFormat("[Meter #{0}] Pressed {1} button, that was correct.", moduleId, buttonIndex == 0 ? "u" : "-");
+            }
         }
     }
 
@@ -279,5 +287,55 @@ public class Meter : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
+    }
+
+    //twitch plays
+    #pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"!{0} press s/-/u/˘ [Presses the stressed or unstressed syllable button] | !{0} reset [Resets all inputs made] | Presses can be chained like this: '!{0} press ssuu'";
+    #pragma warning restore 414
+
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        if (Regex.IsMatch(command, @"^\s*reset\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            yield return null;
+            Debug.LogFormat("[Meter #{0}] Reset of Inputs Triggered! (TP)", moduleId);
+            buttonPressSequence = new int[] { -1, -1, -1, -1, -1, -1 };
+            yield break;
+        }
+        string[] parameters = command.Split(' ');
+        if (Regex.IsMatch(parameters[0], @"^\s*press\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            if(parameters.Length == 2)
+            {
+                for(int i = 0; i < parameters[1].Length; i++)
+                {
+                    if (!parameters[1].ElementAt(i).Equals('u') && !parameters[1].ElementAt(i).Equals('U') && !parameters[1].ElementAt(i).Equals('s') && !parameters[1].ElementAt(i).Equals('S') && !parameters[1].ElementAt(i).Equals('-') && !parameters[1].ElementAt(i).Equals('˘'))
+                    {
+                        yield break;
+                    }
+                }
+                yield return null;
+                for (int i = 0; i < parameters[1].Length; i++)
+                {
+                    if (parameters[1].ElementAt(i).Equals('u') || parameters[1].ElementAt(i).Equals('U') || parameters[1].ElementAt(i).Equals('˘'))
+                    {
+                        Buttons[0].OnInteract();
+                    }
+                    else
+                    {
+                        Buttons[1].OnInteract();
+                    }
+                    yield return new WaitForSeconds(0.25f);
+                }
+            }
+            yield break;
+        }
+    }
+
+    IEnumerator TwitchHandleForcedSolve()
+    {
+        var keyPat = keyMeter.Select(x => x == -1 ? "" : x == 0 ? "u" : "-").ToArray();
+        yield return ProcessTwitchCommand("press " + String.Join(" ", keyPat).Replace(" ",""));
     }
 }
